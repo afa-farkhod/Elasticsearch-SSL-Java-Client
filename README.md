@@ -100,3 +100,24 @@ openssl pkcs12 -export -in client.crt -inkey private_key.pem \
   - The above command can be used for other clients as well. The keytool command is a generic tool that can be used to manage certificates and keystores. The -import option is not specific to Java clients. It can be used to import certificates into any keystore that supports the JKS format.
   - The truststore is a file that contains a list of trusted certificates. When a client connects to a server using SSL/TLS, the client will check the server's certificate against the truststore. If the certificate is found in the truststore, the client will trust the server and the connection will be established.
   - The truststore can be used by any client that supports SSL/TLS. This includes Java clients, as well as clients written in other languages.
+
+## [Troubleshooting](https://github.com/af4092/Elasticsearch-SSL-Java-Client/blob/main/README.md)
+
+- [Problems with access to Elasticsearch form outside machine](https://discuss.elastic.co/t/problems-with-access-to-elasticsearch-form-outside-machine/172450) - Following shows the issue with accessing Elasticsearch form outside machine.
+- [Unable to remotely access ES server hosted on AWS EC2 on port 9200](https://discuss.elastic.co/t/unable-to-remotely-access-es-server-hosted-on-aws-ec2-on-port-9200/33243) - Unable to remotely access ES server hosted on AWS EC2 on port 9200. It includes some solutions
+- [Elasticsearch api secure using SSH tunneling](https://pramodshehan.medium.com/elasticsearch-api-secure-using-ssh-tunnels-c6e82595842f) - SSH is a method for secure remote login (encrypted secure shell connection) from one machine to another machine. Following shows how to do elasticsearch securing using ssh tunneling
+- [Host name does not match the certificate](https://discuss.elastic.co/t/host-name-does-not-match-the-certificate/186618) - need to disable hostname verification your in HttpAsyncClientBuilder
+
+```
+public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+  return httpClientBuilder
+         .setDefaultCredentialsProvider(credentialsProvider)
+         .setSSLContext(sslContext)
+         .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE);
+}
+```
+- [Verifying HTTPS with a CA certificate](https://www.elastic.co/guide/en/elasticsearch/client/java-api-client/current/connecting.html) - The generated root CA certificate can be found in the certs directory in your Elasticsearch config location. If you’re running Elasticsearch in Docker there is [additional documentation](https://www.elastic.co/guide/en/elasticsearch/reference/8.8/docker.html) for retrieving the CA certificate.
+
+<p align="center">
+  <img src="https://github.com/af4092/Elasticsearch-JavaAPI-connection/assets/24220136/b6f66593-2135-409a-be7d-74b3863f6201" alt="Image">
+</p>
